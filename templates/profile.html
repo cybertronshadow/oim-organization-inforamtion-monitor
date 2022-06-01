@@ -1,0 +1,33 @@
+{% extends 'main.html' %} {% block content %}
+
+<main class="profile-page layout layout--2">
+	<div class="container">
+		<!-- Room Start -->
+		<div class="room">
+			<div class="room__top">
+				<div class="room__topLeft">
+					<h3>User Profile</h3>
+				</div>
+			</div>
+			<div class="room__box scroll">
+				<div class="room__header scroll">
+					<div class="room__info">
+						<h3>{{user.username}}</h3>
+						<span>{{user.created|timesince}} days ago</span>
+					</div>
+					<div class="room__hosted">
+						<p>Hosted By</p>
+					</div>
+					<div class="room__details">{{user.name}}</div>
+				</div>
+			</div>
+		</div>
+		<!-- Room End -->
+
+		<!--   Start -->
+		<div></div>
+		<!--  End -->
+	</div>
+</main>
+
+{% endblock content %}

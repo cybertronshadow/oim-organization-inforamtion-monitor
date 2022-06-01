@@ -1,0 +1,156 @@
+{% extends 'main.html' %} {% block content %}
+
+<main class="layout layout--3">
+	<div class="container">
+		<!-- Topics Start -->
+		<div class="topics">
+			<div class="topics__header">
+				<h2>Department</h2>
+			</div>
+			<ul class="topics__list">
+				<li>
+					<a href="{% url 'faqs-page' %}" class="active"
+						>General <span>{{departments.count}}</span></a
+					>
+				</li>
+				{% for department in departments %}
+				<li>
+					<a href="{% url 'faqs-page' %}?q={{department.body}}"
+						>{{department}} <span>{{department.faq_set.all.count}}</span></a
+					>
+				</li>
+				{% endfor %}
+			</ul>
+		</div>
+		<!-- Topics End -->
+
+		<!-- Room List Start -->
+		<div class="roomList">
+			<div class="mobile-menu">
+				<form
+					action="{% url 'faqs-page' %}"
+					method="GET"
+					class="header__search"
+				>
+					<label>
+						<svg
+							version="1.1"
+							xmlns="http://www.w3.org/2000/svg"
+							width="32"
+							height="32"
+							viewBox="0 0 32 32"
+						>
+							<title>search</title>
+							<path
+								d="M32 30.586l-10.845-10.845c1.771-2.092 2.845-4.791 2.845-7.741 0-6.617-5.383-12-12-12s-12 5.383-12 12c0 6.617 5.383 12 12 12 2.949 0 5.649-1.074 7.741-2.845l10.845 10.845 1.414-1.414zM12 22c-5.514 0-10-4.486-10-10s4.486-10 10-10c5.514 0 10 4.486 10 10s-4.486 10-10 10z"
+							></path>
+						</svg>
+						<input name="q" placeholder="Search for anything" />
+					</label>
+				</form>
+			</div>
+			<div class="roomList__header">
+				<div>
+					<h2>FAQs</h2>
+					<p>{{faqs.count}} Total FAQs</p>
+				</div>
+				{% if request.user.is_staff %}
+				<a class="btn btn--main" href="{% url 'create-faq' %}">
+					<svg
+						version="1.1"
+						xmlns="http://www.w3.org/2000/svg"
+						width="32"
+						height="32"
+						viewBox="0 0 32 32"
+					>
+						<title>add</title>
+						<path
+							d="M16.943 0.943h-1.885v14.115h-14.115v1.885h14.115v14.115h1.885v-14.115h14.115v-1.885h-14.115v-14.115z"
+						></path>
+					</svg>
+					New FAQs
+				</a>
+				{% endif %}
+			</div>
+			{% for faq in faqs %}{% if request.user == faq.user %}
+			<a href="{% url 'update-faq' faq.id %}">
+				<svg
+					enable-background="new 0 0 24 24"
+					height="22"
+					viewBox="0 0 24 24"
+					width="32"
+					xmlns="http://www.w3.org/2000/svg"
+				>
+					<title>edit</title>
+					<g>
+						<path
+							d="m23.5 22h-15c-.276 0-.5-.224-.5-.5s.224-.5.5-.5h15c.276 0 .5.224.5.5s-.224.5-.5.5z"
+						/>
+					</g>
+					<g>
+						<g>
+							<path
+								d="m2.5 22c-.131 0-.259-.052-.354-.146-.123-.123-.173-.3-.133-.468l1.09-4.625c.021-.09.067-.173.133-.239l14.143-14.143c.565-.566 1.554-.566 2.121 0l2.121 2.121c.283.283.439.66.439 1.061s-.156.778-.439 1.061l-14.142 14.141c-.065.066-.148.112-.239.133l-4.625 1.09c-.038.01-.077.014-.115.014zm1.544-4.873-.872 3.7 3.7-.872 14.042-14.041c.095-.095.146-.22.146-.354 0-.133-.052-.259-.146-.354l-2.121-2.121c-.19-.189-.518-.189-.707 0zm3.081 3.283h.01z"
+							/>
+						</g>
+						<g>
+							<path
+								d="m17.889 10.146c-.128 0-.256-.049-.354-.146l-3.535-3.536c-.195-.195-.195-.512 0-.707s.512-.195.707 0l3.536 3.536c.195.195.195.512 0 .707-.098.098-.226.146-.354.146z"
+							/>
+						</g>
+					</g>
+				</svg>
+			</a>
+
+			<a href="{% url 'delete-faq' faq.id %}">
+				<svg
+					version="1.1"
+					xmlns="http://www.w3.org/2000/svg"
+					width="32"
+					height="22"
+					viewBox="0 0 32 32"
+				>
+					<title>remove</title>
+					<path
+						d="M27.314 6.019l-1.333-1.333-9.98 9.981-9.981-9.981-1.333 1.333 9.981 9.981-9.981 9.98 1.333 1.333 9.981-9.98 9.98 9.98 1.333-1.333-9.98-9.98 9.98-9.981z"
+					></path>
+				</svg>
+			</a>
+			{% endif %}
+			<div class="roomListRoom">
+				<div class="roomListRoom__header">
+					<a class="roomListRoom__author">
+						<div class="avatar avatar--small">
+							<img src="{{faq.user.avatar.url}}" />
+						</div>
+						<span>@{{faq.user}}</span>
+					</a>
+					<div class="roomListRoom__actions">
+						<span>{{faq.created|timesince}} days ago</span>
+					</div>
+				</div>
+				<div class="roomListRoom__content">
+					<a href="{% url 'faq-page' faq.id %}"> {{faq.title}}</a>
+					<p>{{faq.description|truncatechars:100}}</p>
+				</div>
+				<div class="roomListRoom__meta">
+					<p class="roomListRoom__topic">{{faq.department}}</p>
+				</div>
+			</div>
+			{% endfor %}
+		</div>
+		<!-- Room List End -->
+
+		<!-- Activities Start -->
+		<div class="activities">
+			<h1>Recent FAQs</h1>
+			{% for faq in faqs %}
+			<div>
+				<a href="{% url 'faq-page' faq.id %}">{{faq.title}}</a>
+			</div>
+			{% endfor %}
+		</div>
+		<!-- Activities End -->
+	</div>
+</main>
+{% endblock content %}

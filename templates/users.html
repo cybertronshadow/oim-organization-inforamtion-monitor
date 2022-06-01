@@ -1,0 +1,76 @@
+{% extends 'main.html' %} {% block content %}
+
+<main class="layout layout--3">
+	<div class="container">
+		<div></div>
+		<!-- Room Start -->
+
+		<div class="roomList">
+			<div class="room__top">
+				<div class="room__topLeft">
+					<a href="{% url 'home-page' %}">
+						<svg
+							version="1.1"
+							xmlns="http://www.w3.org/2000/svg"
+							width="32"
+							height="32"
+							viewBox="0 0 32 32"
+						>
+							<title>arrow-left</title>
+							<path
+								d="M13.723 2.286l-13.723 13.714 13.719 13.714 1.616-1.611-10.96-10.96h27.625v-2.286h-27.625l10.965-10.965-1.616-1.607z"
+							></path>
+						</svg>
+					</a>
+					<h3>Users</h3>
+				</div>
+			</div>
+			{% for user in users %}
+			<div class="roomListRoom">
+				<div class="roomListRoom__header">
+					<a class="roomListRoom__author">
+						<div class="avatar avatar--small">
+							<img src="{{user.avatar.url}}" />
+						</div>
+					</a>
+					<div class="roomListRoom__actions">
+						<span>{{user.email}}</span>
+						<span>{{user.joined}}</span>
+					</div>
+				</div>
+				<div class="roomListRoom__content">
+					<a href="">Username: {{user.username}}</a>
+					<p></p>
+				</div>
+				<div class="roomListRoom__meta">
+					<p class="roomListRoom__topic">{{user.name}}</p>
+				</div>
+			</div>
+			{% endfor %}
+		</div>
+		<!-- Room End -->
+
+		<!--   Start -->
+		<div>
+			{% if request.user.is_staff %}
+			<a class="btn btn--main" href="{% url 'registration-page' %}">
+				<svg
+					version="1.1"
+					xmlns="http://www.w3.org/2000/svg"
+					width="32"
+					height="32"
+					viewBox="0 0 32 32"
+				>
+					<title>add</title>
+					<path
+						d="M16.943 0.943h-1.885v14.115h-14.115v1.885h14.115v14.115h1.885v-14.115h14.115v-1.885h-14.115v-14.115z"
+					></path>
+				</svg>
+				New User
+			</a>
+			{% endif %}
+		</div>
+		<!--  End -->
+	</div>
+</main>
+{% endblock content %}

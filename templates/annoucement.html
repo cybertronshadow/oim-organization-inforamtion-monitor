@@ -1,0 +1,118 @@
+{% extends 'main.html' %} {% block content %}
+
+<main class="profile-page layout layout--2">
+	<div class="container">
+		<!-- Room Start -->
+		<div class="room">
+			<div class="room__top">
+				<div class="room__topLeft">
+					<a href="{% url 'home-page' %}">
+						<svg
+							version="1.1"
+							xmlns="http://www.w3.org/2000/svg"
+							width="32"
+							height="32"
+							viewBox="0 0 32 32"
+						>
+							<title>arrow-left</title>
+							<path
+								d="M13.723 2.286l-13.723 13.714 13.719 13.714 1.616-1.611-10.96-10.96h27.625v-2.286h-27.625l10.965-10.965-1.616-1.607z"
+							></path>
+						</svg>
+					</a>
+					<h3>Annoucement</h3>
+				</div>
+			</div>
+			<div class="room__box scroll">
+				<div class="room__header scroll">
+					<div class="room__info">
+						<h3>{{annoucement.title}}</h3>
+						<span>{{annoucement.created|timesince}} days ago</span>
+					</div>
+					<div class="room__hosted">
+						<p>Hosted By {{annoucement.host}}</p>
+					</div>
+					<div class="room__details">{{annoucement.description}}</div>
+					<span class="room__topics">{{annoucement.department}}</span>
+				</div>
+				{% for message in annoucement_messages %}
+				<div class="room__conversation">
+					<div class="threads scroll">
+						<div class="thread">
+							<div class="thread__top">
+								<div class="thread__author">
+									<a href="" class="thread__authorInfo">
+										<div class="avatar avatar--small">
+											<img
+												src="https://randomuser.me/api/portraits/men/37.jpg"
+											/>
+										</div>
+										<span>@{{message.user}}</span>
+									</a>
+									<span class="thread__date"
+										>{{message.created|timesince}} day ago</span
+									>
+								</div>
+								{% if request.user == message.user %}
+								<div class="thread__delete">
+									<a href="{% url 'delete-message' message.id %}">
+										<svg
+											version="1.1"
+											xmlns="http://www.w3.org/2000/svg"
+											width="32"
+											height="32"
+											viewBox="0 0 32 32"
+										>
+											<title>remove</title>
+											<path
+												d="M27.314 6.019l-1.333-1.333-9.98 9.981-9.981-9.981-1.333 1.333 9.981 9.981-9.981 9.98 1.333 1.333 9.981-9.98 9.98 9.98 1.333-1.333-9.98-9.98 9.98-9.981z"
+											></path>
+										</svg>
+									</a>
+								</div>
+								{% endif %}
+							</div>
+							<div class="thread__details">{{message.body}}</div>
+						</div>
+					</div>
+				</div>
+				{% endfor %}
+			</div>
+			{% if request.user.is_authenticated %}
+			<div class="room__message">
+				<form action="" method="POST">
+					{% csrf_token %}
+					<input
+						name="body"
+						type="text"
+						placeholder="Write your message here..."
+					/>
+				</form>
+			</div>
+			{% endif %}
+		</div>
+		<!-- Room End -->
+
+		<!--   Start -->
+		<div class="participants">
+			<h3 class="participants__top">
+				Engagement <span>({{annoucement.participants.count}} Joined)</span>
+			</h3>
+			{% for user in participants %}
+			<div class="participants__list scroll">
+				<a href="profile.html" class="participant">
+					<div class="avatar avatar--medium">
+						<img src="https://randomuser.me/api/portraits/men/37.jpg" />
+					</div>
+					<p>
+						{{user}}
+						<span>@{{user.username}}</span>
+					</p>
+				</a>
+			</div>
+			{% endfor %}
+		</div>
+		<!--  End -->
+	</div>
+</main>
+{% endblock content %}
